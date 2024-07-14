@@ -2,7 +2,7 @@ package edu.ezip.ing1.pds.demo194;
 
 import edu.ezip.ing1.pds.business.dto.*;
 import edu.ezip.ing1.pds.client.DeleteByClient;
-import edu.ezip.ing1.pds.client.SelectInformation;
+import edu.ezip.ing1.pds.client.SelectByClient;
 import edu.ezip.ing1.pds.client.UpdateByClient;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -42,7 +42,7 @@ public class NutritionistInformationController extends NutritionistHeadControlle
                 alert.setHeaderText(tableColumn.getText() + " : " + data);
                 alert.showAndWait();
             });
-            Informations informations = SelectInformation.getValue("SELECT_ALL_INFORMATIONS");
+            Informations informations = (Informations) SelectByClient.getValue("SELECT_ALL_INFORMATIONS");
             idInformationColumn.setCellValueFactory(new PropertyValueFactory<>("Id_info"));
             idClientColumn.setCellValueFactory(new PropertyValueFactory<>("Id_Client"));
             repasColumn.setCellValueFactory(new PropertyValueFactory<>("NbDeRepas"));

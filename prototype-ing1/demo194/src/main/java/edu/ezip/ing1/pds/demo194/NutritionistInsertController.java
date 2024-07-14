@@ -1,6 +1,6 @@
 package edu.ezip.ing1.pds.demo194;
 
-import edu.ezip.ing1.pds.business.dto.Nutritionniste;
+import edu.ezip.ing1.pds.business.dto.Nutritionist;
 import edu.ezip.ing1.pds.client.InsertByClient;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -55,7 +55,7 @@ public class NutritionistInsertController extends NutritionistHeadController {
 
             if (assertNotNull(nom, prenom, numero, mail) && mailBoolean && numberBoolean) {
                 try {
-                    Nutritionniste nutritionniste = new Nutritionniste(-1,nom,prenom,numero,mail);
+                    Nutritionist nutritionniste = new Nutritionist(-1,nom,prenom,numero,mail);
                     InsertByClient.sendValue("INSERT_NUTRITIONNISTE", nutritionniste);
                     alert.setAlertType(Alert.AlertType.INFORMATION);
                     alert.setHeaderText("Insertion effectuée.");

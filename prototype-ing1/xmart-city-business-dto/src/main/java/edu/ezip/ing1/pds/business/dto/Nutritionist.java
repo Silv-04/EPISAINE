@@ -9,19 +9,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-@JsonRootName(value = "nutritionniste")
+@JsonRootName(value = "nutritionist")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Nutritionniste {
+public class Nutritionist {
     private Integer id_nutritionniste;
     private String nom_n;
     private String prenom_n;
     private String numero_de_telephone_n;
     private String mail_n;
 
-    public Nutritionniste() {
+    public Nutritionist() {
     }
 
-    public final Nutritionniste build(final ResultSet resultSet)
+    public final Nutritionist build(final ResultSet resultSet)
             throws SQLException, NoSuchFieldException, IllegalAccessException {
         setFieldsFromResultSet(resultSet,"id_nutritionniste",  "nom_n", "prenom_n", "numero_de_telephone_n", "mail_n");
         return this;
@@ -32,7 +32,7 @@ public class Nutritionniste {
         return buildPreparedStatement(preparedStatement, id_nutritionniste, nom_n, prenom_n, numero_de_telephone_n, mail_n);
     }
 
-    public Nutritionniste(Integer id_nutritionniste, String nom_n, String prenom_n, String numero_de_telephone_n, String mail_n) {
+    public Nutritionist(Integer id_nutritionniste, String nom_n, String prenom_n, String numero_de_telephone_n, String mail_n) {
         this.id_nutritionniste = id_nutritionniste;
         this.nom_n = nom_n;
         this.prenom_n = prenom_n;
@@ -104,7 +104,7 @@ public class Nutritionniste {
 
     @Override
     public String toString() {
-        return "nutritionniste{" +
+        return "nutritionist{" +
                 "Id_nutritionniste='" + id_nutritionniste + '\'' +
                 ", Nom_N='" + nom_n + '\'' +
                 ", Prenom_N=" + prenom_n +

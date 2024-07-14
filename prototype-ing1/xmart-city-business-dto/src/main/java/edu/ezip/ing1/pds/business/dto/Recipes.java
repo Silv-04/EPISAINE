@@ -8,30 +8,30 @@ import java.util.Set;
 
 
 
-public class Recettes {
+public class Recipes {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonProperty("recettes")
-    private Set<Recette> recettes = new LinkedHashSet<>();
+    @JsonProperty("recipes")
+    private Set<Recipe> recettes = new LinkedHashSet<>();
 
-    public Set<Recette> getRecettes() {
+    public Set<Recipe> getRecettes() {
         return recettes;
     }
 
-    @JsonProperty("recettes")
-    public void setRecettes(Set<Recette> recettes) {
+    @JsonProperty("recipes")
+    public void setRecettes(Set<Recipe> recettes) {
         this.recettes = recettes;
     }
 
-    public final Recettes add(final Recette recette) {
+    public final Recipes add(final Recipe recette) {
         recettes.add(recette);
         return this;
     }
 
     @Override
     public String toString() {
-        return "Recettes{" +
-                "recettes=" + recettes +
+        return "Recipes{" +
+                "recipes=" + recettes +
                 '}';
     }
 }

@@ -2,8 +2,8 @@ package edu.ezip.ing1.pds.demo194;
 
 import edu.ezip.ing1.pds.business.dto.Client;
 import edu.ezip.ing1.pds.business.dto.Information;
-import edu.ezip.ing1.pds.business.dto.Recette;
-import edu.ezip.ing1.pds.business.dto.Recettes;
+import edu.ezip.ing1.pds.business.dto.Recipe;
+import edu.ezip.ing1.pds.business.dto.Recipes;
 import edu.ezip.ing1.pds.client.InsertByClient;
 import edu.ezip.ing1.pds.client.SelectRecipe;
 import edu.ezip.ing1.pds.client.SelectSpecificClient;
@@ -32,11 +32,11 @@ public class ClientInformationController extends ClientHeadController {
     @FXML
     private CheckComboBox<String> allergieCheckComboBox;
     @FXML
-    private TableView<Recette> recipeTableView;
+    private TableView<Recipe> recipeTableView;
     @FXML
-    private TableColumn<Recette, Integer> idRecetteColumn, idNutritionistColumn, caloriesColumn;
+    private TableColumn<Recipe, Integer> idRecetteColumn, idNutritionistColumn, caloriesColumn;
     @FXML
-    private TableColumn<Recette, String> nomColumn, ingredientsColumn, instructionsColumn, regimeColumn;
+    private TableColumn<Recipe, String> nomColumn, ingredientsColumn, instructionsColumn, regimeColumn;
     @FXML
     private TextField searchTextField;
 
@@ -103,7 +103,7 @@ public class ClientInformationController extends ClientHeadController {
                 TablePosition tablePosition = recipeTableView.getSelectionModel().getSelectedCells().getFirst();
                 int row = tablePosition.getRow();
 
-                Recette recette = recipeTableView.getItems().get(row);
+                Recipe recette = recipeTableView.getItems().get(row);
                 TableColumn tableColumn = tablePosition.getTableColumn();
 
                 String data = tableColumn.getCellObservableValue(recette).getValue().toString();
@@ -113,7 +113,7 @@ public class ClientInformationController extends ClientHeadController {
             });
 
             String id = idTextField.getText();
-            Recettes recettes = new Recettes();
+            Recipes recettes = new Recipes();
             if (!id.isEmpty()) {
                 Client client = SelectSpecificClient.getValue("SELECT_SPECIFIC_CLIENT", id);
 
@@ -167,7 +167,7 @@ public class ClientInformationController extends ClientHeadController {
             regimeColumn.setCellValueFactory(new PropertyValueFactory<>("RegimeAlimentaire"));
 
             // display every recipe on the tableview
-            for (Recette recette : recettes.getRecettes()) {
+            for (Recipe recette : recettes.getRecettes()) {
                 ObservableList<String> allergies = allergieCheckComboBox.getCheckModel().getCheckedItems();
                 Boolean isSafe = true;
 
@@ -200,7 +200,7 @@ public class ClientInformationController extends ClientHeadController {
 
 
             // this part is used to filter the tableview with the search bar
-            FilteredList<Recette> filteredList = new FilteredList<>(recipeTableView.getItems(), p->true);
+            FilteredList<Recipe> filteredList = new FilteredList<>(recipeTableView.getItems(), p->true);
 
             searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
                 filteredList.setPredicate(recette -> {
@@ -235,7 +235,7 @@ public class ClientInformationController extends ClientHeadController {
                 });
             });
 
-            SortedList<Recette> sortedList = new SortedList<>(filteredList);
+            SortedList<Recipe> sortedList = new SortedList<>(filteredList);
             sortedList.comparatorProperty().bind(recipeTableView.comparatorProperty());
             recipeTableView.setItems(sortedList);
         }

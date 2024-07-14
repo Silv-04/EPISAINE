@@ -10,8 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@JsonRootName(value = "recette")
-public class Recette {
+@JsonRootName(value = "recipe")
+public class Recipe {
     private Integer id_recette;
     private Integer id_nutritionniste;
     private String nom_recette;
@@ -20,10 +20,10 @@ public class Recette {
     private String instructions;
     private String regimeAlimentaire;
 
-    public Recette() {
+    public Recipe() {
     }
 
-    public final Recette build(final ResultSet resultSet)
+    public final Recipe build(final ResultSet resultSet)
             throws SQLException, NoSuchFieldException, IllegalAccessException {
         setFieldsFromResultSet(resultSet,"id_recette",  "nom_recette", "nombre_de_calories", "ingredients", "instructions", "regimeAlimentaire", "id_nutritionniste");
         return this;
@@ -34,7 +34,7 @@ public class Recette {
         return buildPreparedStatement(preparedStatement, id_recette, nom_recette, nombre_de_calories, ingredients, instructions, regimeAlimentaire);
     }
 
-    public Recette(Integer id_recette, Integer id_nutritionniste, String nom_recette, Integer nombre_de_calories, String ingredients, String instructions, String regimeAlimentaire) {
+    public Recipe(Integer id_recette, Integer id_nutritionniste, String nom_recette, Integer nombre_de_calories, String ingredients, String instructions, String regimeAlimentaire) {
         this.id_recette = id_recette;
         this.nom_recette = nom_recette;
         this.nombre_de_calories = nombre_de_calories;
@@ -124,7 +124,7 @@ public class Recette {
 
     @Override
     public String toString() {
-        return "Recette{" +
+        return "Recipe{" +
                 "Id_nutritionniste='" + id_nutritionniste + '\'' +
                 ", Nom_Recette='" + nom_recette + '\'' +
                 ", Nombre_de_calories=" + nombre_de_calories +

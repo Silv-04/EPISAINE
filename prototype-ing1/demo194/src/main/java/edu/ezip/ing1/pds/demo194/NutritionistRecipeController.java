@@ -1,11 +1,11 @@
 package edu.ezip.ing1.pds.demo194;
 
-import edu.ezip.ing1.pds.business.dto.Recette;
-import edu.ezip.ing1.pds.business.dto.Recettes;
+import edu.ezip.ing1.pds.business.dto.Recipe;
+import edu.ezip.ing1.pds.business.dto.Recipes;
 import edu.ezip.ing1.pds.business.dto.Update;
 import edu.ezip.ing1.pds.client.DeleteByClient;
 import edu.ezip.ing1.pds.client.InsertByClient;
-import edu.ezip.ing1.pds.client.SelectRecipe;
+import edu.ezip.ing1.pds.client.SelectByClient;
 import edu.ezip.ing1.pds.client.UpdateByClient;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -24,15 +24,15 @@ public class NutritionistRecipeController extends NutritionistHeadController {
     @FXML
     private ComboBox<String> regimeComboBox;
     @FXML
-    private TableView<Recette> recipeTableView;
+    private TableView<Recipe> recipeTableView;
     @FXML
-    private TableColumn<Recette, Integer> idRecetteColumn, idNutritionistColumn, caloriesColumn;
+    private TableColumn<Recipe, Integer> idRecetteColumn, idNutritionistColumn, caloriesColumn;
     @FXML
-    private TableColumn<Recette, String> nomColumn, ingredientsColumn, instructionsColumn, regimeColumn;
+    private TableColumn<Recipe, String> nomColumn, ingredientsColumn, instructionsColumn, regimeColumn;
     @FXML
     private TextField searchTextField;
-    FilteredList<Recette> filteredList;
-    SortedList<Recette> sortedList;
+    FilteredList<Recipe> filteredList;
+    SortedList<Recipe> sortedList;
 
     // insert recipe into the database
     public void insertRecipeData(ActionEvent actionEvent) {
@@ -71,7 +71,7 @@ public class NutritionistRecipeController extends NutritionistHeadController {
         try {
             if (assertNotNull(nom, instructions, ingredients, regime) && calorieBoolean) {
                 try {
-                    Recette recette = new Recette(-1, idNutritionist, nom, calorie, ingredients, instructions, regime);
+                    Recipe recette = new Recipe(-1, idNutritionist, nom, calorie, ingredients, instructions, regime);
                     InsertByClient.sendValue("INSERT_RECETTE", recette);
                     alert.setHeaderText("Insertion effectuée.");
                     alert.showAndWait();
@@ -125,7 +125,7 @@ public class NutritionistRecipeController extends NutritionistHeadController {
                 TablePosition tablePosition = recipeTableView.getSelectionModel().getSelectedCells().getFirst();
                 int row = tablePosition.getRow();
 
-                Recette recette = recipeTableView.getItems().get(row);
+                Recipe recette = recipeTableView.getItems().get(row);
                 TableColumn tableColumn = tablePosition.getTableColumn();
 
                 String data = tableColumn.getCellObservableValue(recette).getValue().toString();
@@ -135,10 +135,10 @@ public class NutritionistRecipeController extends NutritionistHeadController {
             });
 
             // get data from the database
-            Recettes recettes = SelectRecipe.getValue("SELECT_ALL_RECETTES", null);
+            Recipes recettes = (Recipes) SelectByClient.getValue("SELECT_ALL_RECIPES");
 
             // add data to the tableview
-            for (Recette recette : recettes.getRecettes()) {
+            for (Recipe recette : recettes.getRecettes()) {
                 recipeTableView.getItems().add(recette);
             }
 
@@ -205,7 +205,7 @@ public class NutritionistRecipeController extends NutritionistHeadController {
 
         int row = tablePosition.getRow();
 
-        Recette recette = recipeTableView.getItems().get(row);
+        Recipe recette = recipeTableView.getItems().get(row);
 
         TableColumn tableColumn = tablePosition.getTableColumn();
 
@@ -350,7 +350,7 @@ public class NutritionistRecipeController extends NutritionistHeadController {
 
         int row = tablePosition.getRow();
 
-        Recette recette = recipeTableView.getItems().get(row);
+        Recipe recette = recipeTableView.getItems().get(row);
 
         TableColumn tableColumn = tablePosition.getTableColumn();
 

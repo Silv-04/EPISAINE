@@ -3,7 +3,7 @@ package edu.ezip.ing1.pds.client;
 import java.io.IOException;
 import java.util.UUID;
 
-import edu.ezip.ing1.pds.business.dto.Recettes;
+import edu.ezip.ing1.pds.business.dto.Recipes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,8 +21,8 @@ public class SelectRecipe {
     private final static Logger logger = LoggerFactory.getLogger(LoggingLabel);
     private final static String networkConfigFile = "network.yaml";
 
-    public static Recettes getValue(String requestOrder, String requestConditions) {
-        Recettes recettes = new Recettes();
+    public static Recipes getValue(String requestOrder, String requestConditions) {
+        Recipes recettes = new Recipes();
         try {
             final NetworkConfig networkConfig = ConfigLoader.loadConfig(NetworkConfig.class, networkConfigFile);
 
@@ -45,7 +45,7 @@ public class SelectRecipe {
                     networkConfig, birthdate++, request, requestConditions, requestBytes);
             clientRequest.join();
 
-            recettes = objectMapper.convertValue(clientRequest.getResult(), Recettes.class);
+            recettes = objectMapper.convertValue(clientRequest.getResult(), Recipes.class);
             logger.info("data requested : " + recettes.toString());
         }
         catch (IOException | InterruptedException ioe) {
@@ -55,7 +55,7 @@ public class SelectRecipe {
     }
 
     public static void main(String[] args) {
-        Recettes recettes = SelectRecipe.getValue("SELECT_SPECIFIC_RECIPES_NOT_BELOW", String.valueOf(2200));
+        Recipes recettes = SelectRecipe.getValue("SELECT_SPECIFIC_RECIPES_NOT_BELOW", String.valueOf(2200));
         System.out.println(recettes);
     }
 }

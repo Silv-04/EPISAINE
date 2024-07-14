@@ -2,7 +2,7 @@ package edu.ezip.ing1.pds.demo194;
 
 import edu.ezip.ing1.pds.business.dto.*;
 import edu.ezip.ing1.pds.client.DeleteByClient;
-import edu.ezip.ing1.pds.client.SelectClient;
+import edu.ezip.ing1.pds.client.SelectByClient;
 import edu.ezip.ing1.pds.client.UpdateByClient;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -41,7 +41,7 @@ public class NutritionistClientController extends NutritionistHeadController {
                 alert.showAndWait();
             });
 
-            Clients clients = (Clients) SelectClient.getValue("SELECT_ALL_CLIENTS");
+            Clients clients = (Clients) SelectByClient.getValue("SELECT_ALL_CLIENTS");
 
             idClientColumn.setCellValueFactory(new PropertyValueFactory<>("Id_client"));
             nomClientColumn.setCellValueFactory(new PropertyValueFactory<>("Nom_client"));

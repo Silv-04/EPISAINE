@@ -5,30 +5,30 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class Nutritionnistes {
+public class Nutritionists {
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonProperty("nutritionnistes")
-    private Set<Nutritionniste> nutritionnistes = new LinkedHashSet<>();
+    @JsonProperty("nutritionists")
+    private Set<Nutritionist> nutritionnistes = new LinkedHashSet<>();
 
-    public Set<Nutritionniste> getNutritionnistes() {
+    public Set<Nutritionist> getNutritionnistes() {
         return nutritionnistes;
     }
 
-    @JsonProperty("nutritionnistes")
-    public void setNutritionnistes(Set<Nutritionniste> nutritionnistes) {
+    @JsonProperty("nutritionists")
+    public void setNutritionnistes(Set<Nutritionist> nutritionnistes) {
         this.nutritionnistes = nutritionnistes;
     }
 
-    public final Nutritionnistes add(final Nutritionniste nutritionniste) {
+    public final Nutritionists add(final Nutritionist nutritionniste) {
         nutritionnistes.add(nutritionniste);
         return this;
     }
 
     @Override
     public String toString() {
-        return "Nutritionnistes{" +
-                "nutritionnistes=" + nutritionnistes +
+        return "Nutritionists{" +
+                "nutritionists=" + nutritionnistes +
                 '}';
     }
 }

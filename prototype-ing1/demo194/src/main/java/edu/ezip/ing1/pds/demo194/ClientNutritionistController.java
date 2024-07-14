@@ -1,7 +1,7 @@
 package edu.ezip.ing1.pds.demo194;
 
 import edu.ezip.ing1.pds.business.dto.*;
-import edu.ezip.ing1.pds.client.SelectNutritionist;
+import edu.ezip.ing1.pds.client.SelectByClient;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
@@ -14,11 +14,11 @@ public class ClientNutritionistController extends ClientHeadController {
     @FXML
     private TextField searchTextField;
     @FXML
-    private TableView<Nutritionniste> nutritionistTableView;
+    private TableView<Nutritionist> nutritionistTableView;
     @FXML
-    private TableColumn<Nutritionniste, Integer> idNutritionistColumn;
+    private TableColumn<Nutritionist, Integer> idNutritionistColumn;
     @FXML
-    private TableColumn<Nutritionniste, String> prenomColumn, nomColumn, telephoneColumn, mailColumn;
+    private TableColumn<Nutritionist, String> prenomColumn, nomColumn, telephoneColumn, mailColumn;
 
     @FXML
     private void selectNutritionistData(ActionEvent actionEvent) {
@@ -30,7 +30,7 @@ public class ClientNutritionistController extends ClientHeadController {
                 TablePosition tablePosition = nutritionistTableView.getSelectionModel().getSelectedCells().getFirst();
                 int row = tablePosition.getRow();
 
-                Nutritionniste nutritionniste = nutritionistTableView.getItems().get(row);
+                Nutritionist nutritionniste = nutritionistTableView.getItems().get(row);
                 TableColumn tableColumn = tablePosition.getTableColumn();
 
                 String data = tableColumn.getCellObservableValue(nutritionniste).getValue().toString();
@@ -39,7 +39,7 @@ public class ClientNutritionistController extends ClientHeadController {
                 alert.showAndWait();
             });
 
-            Nutritionnistes nutritionnistes = SelectNutritionist.getValue("SELECT_ALL_NUTRITIONNISTES");
+            Nutritionists nutritionnistes = (Nutritionists) SelectByClient.getValue("SELECT_ALL_NUTRITIONNISTES");
 
             idNutritionistColumn.setCellValueFactory(new PropertyValueFactory<>("Id_nutritionniste"));
             nomColumn.setCellValueFactory(new PropertyValueFactory<>("Nom_N"));
@@ -50,12 +50,12 @@ public class ClientNutritionistController extends ClientHeadController {
             nutritionistTableView.getItems().clear();
 
             // insert every value from the database into the tableview object
-            for (Nutritionniste nutritionniste : nutritionnistes.getNutritionnistes()) {
+            for (Nutritionist nutritionniste : nutritionnistes.getNutritionnistes()) {
                 nutritionistTableView.getItems().add(nutritionniste);
             }
 
             // this part is used to filter the table with the search bar
-            FilteredList<Nutritionniste> filteredList = new FilteredList<>(nutritionistTableView.getItems(), p->true);
+            FilteredList<Nutritionist> filteredList = new FilteredList<>(nutritionistTableView.getItems(), p->true);
 
             searchTextField.textProperty().addListener((observable, oldValue, newValue) -> {
                 filteredList.setPredicate(nutritionniste -> {
@@ -84,7 +84,7 @@ public class ClientNutritionistController extends ClientHeadController {
                 });
             });
 
-            SortedList<Nutritionniste> sortedList = new SortedList<>(filteredList);
+            SortedList<Nutritionist> sortedList = new SortedList<>(filteredList);
             sortedList.comparatorProperty().bind(nutritionistTableView.comparatorProperty());
             nutritionistTableView.setItems(sortedList);
         }

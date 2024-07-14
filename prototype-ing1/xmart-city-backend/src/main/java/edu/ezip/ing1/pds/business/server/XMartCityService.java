@@ -6,10 +6,10 @@ import edu.ezip.ing1.pds.business.dto.Client;
 import edu.ezip.ing1.pds.business.dto.Clients;
 import edu.ezip.ing1.pds.business.dto.Information;
 import edu.ezip.ing1.pds.business.dto.Informations;
-import edu.ezip.ing1.pds.business.dto.Nutritionniste;
-import edu.ezip.ing1.pds.business.dto.Nutritionnistes;
-import edu.ezip.ing1.pds.business.dto.Recette;
-import edu.ezip.ing1.pds.business.dto.Recettes;
+import edu.ezip.ing1.pds.business.dto.Nutritionist;
+import edu.ezip.ing1.pds.business.dto.Nutritionists;
+import edu.ezip.ing1.pds.business.dto.Recipe;
+import edu.ezip.ing1.pds.business.dto.Recipes;
 
 import edu.ezip.ing1.pds.commons.Request;
 import edu.ezip.ing1.pds.commons.Response;
@@ -28,9 +28,9 @@ public class XMartCityService {
         private enum Queries {
             SELECT_ALL_CLIENTS("SELECT t.id_client, t.nom_client, t.prenom_client, t.date_de_naissance_client, t.poids, t.genre, t.taille, t.numero_de_telephone_client, t.mail_client, t.ville, t.adresse, t.code_postal FROM \"episaine-schema\".clients t"),
             SELECT_SPECIFIC_CLIENT("SELECT t.id_client, t.nom_client, t.prenom_client, t.date_de_naissance_client, t.poids, t.genre, t.taille, t.numero_de_telephone_client, t.mail_client, t.ville, t.adresse, t.code_postal FROM \"episaine-schema\".clients t WHERE t.id_client = ?"),
-            SELECT_ALL_RECETTES("SELECT t.id_recette, t.nom_recette, t.nombre_de_calories, t.ingredients, t.instructions, t.regimealimentaire, t.id_nutritionniste FROM \"episaine-schema\".recettes t"),
+            SELECT_ALL_RECIPES("SELECT t.id_recette, t.nom_recette, t.nombre_de_calories, t.ingredients, t.instructions, t.regimealimentaire, t.id_nutritionniste FROM \"episaine-schema\".recettes t"),
             SELECT_ALL_INFORMATIONS("SELECT t.id_info, t.id_client, t.but, t.allergie, t.nbderepas FROM \"episaine-schema\".informations t"),
-            SELECT_ALL_NUTRITIONNISTES("SELECT t.id_nutritionniste, t.nom_n, t.prenom_n, t.numero_de_telephone_n, t.mail_n FROM \"episaine-schema\".nutritionnistes t"),
+            SELECT_ALL_NUTRITIONISTS("SELECT t.id_nutritionniste, t.nom_n, t.prenom_n, t.numero_de_telephone_n, t.mail_n FROM \"episaine-schema\".nutritionnistes t"),
             SELECT_SPECIFIC_RECIPES_NOT_ABOVE("SELECT t.id_recette, t.nom_recette, t.nombre_de_calories, t.ingredients, t.instructions, t.regimealimentaire, t.id_nutritionniste FROM \"episaine-schema\".recettes t WHERE t.nombre_de_calories < ?"),
             SELECT_SPECIFIC_RECIPES_NOT_BELOW("SELECT t.id_recette, t.nom_recette, t.nombre_de_calories, t.ingredients, t.instructions, t.regimealimentaire, t.id_nutritionniste FROM \"episaine-schema\".recettes t WHERE t.nombre_de_calories > ?"),
             SELECT_SPECIFIC_RECIPES_BETWEEN  ("SELECT t.id_recette, t.nom_recette, t.nombre_de_calories, t.ingredients, t.instructions, t.regimealimentaire, t.id_nutritionniste FROM \"episaine-schema\".recettes t WHERE t.nombre_de_calories > ? AND t.nombre_de_calories < ?"),
@@ -38,22 +38,22 @@ public class XMartCityService {
             COUNT_CLIENTS("SELECT count(*) FROM \"episaine-schema\".clients"),
             COUNT_WOMEN("SELECT count(*) FROM \"episaine-schema\".clients where genre = 'Femme'"),
             COUNT_MEN("SELECT count(*) FROM \"episaine-schema\".clients where genre = 'Homme'"),
-            COUNT_RECETTES("SELECT count(*) FROM \"episaine-schema\".recettes"),
-            COUNT_NUTRITIONNISTES("SELECT count(*) FROM \"episaine-schema\".nutritionnistes"),
+            COUNT_RECIPES("SELECT count(*) FROM \"episaine-schema\".recettes"),
+            COUNT_NUTRITIONISTS("SELECT count(*) FROM \"episaine-schema\".nutritionnistes"),
             COUNT_INFORMATIONS("SELECT count(*) FROM \"episaine-schema\".informations"),
-            COUNT_REGIME("SELECT regimealimentaire, count(*) FROM \"episaine-schema\".recettes GROUP BY regimealimentaire ORDER BY COUNT(*) DESC LIMIT 1"),
+            COUNT_DIETS("SELECT regimealimentaire, count(*) FROM \"episaine-schema\".recettes GROUP BY regimealimentaire ORDER BY COUNT(*) DESC LIMIT 1"),
             AVG_CALORIE("SELECT AVG(nombre_de_calories) AS moyenne_calories_par_recette FROM \"episaine-schema\".recettes"),
-            AVG_ALLERGIE("SELECT allergie, COUNT(*) AS nombre_total, (COUNT(*) * 100.0 / (SELECT COUNT(*) FROM \"episaine-schema\".informations)) AS pourcentage FROM \"episaine-schema\".informations GROUP BY allergie ORDER BY COUNT(*) DESC LIMIT 1"),
+            AVG_ALLERGY("SELECT allergie, COUNT(*) AS nombre_total, (COUNT(*) * 100.0 / (SELECT COUNT(*) FROM \"episaine-schema\".informations)) AS pourcentage FROM \"episaine-schema\".informations GROUP BY allergie ORDER BY COUNT(*) DESC LIMIT 1"),
 
             INSERT_CLIENT("INSERT into \"episaine-schema\".clients (\"nom_client\", \"prenom_client\", \"date_de_naissance_client\", \"poids\", \"genre\", \"taille\", \"numero_de_telephone_client\", \"mail_client\", \"ville\", \"adresse\", \"code_postal\") values (?,?,?,?,?,?,?,?,?,?,?)"),
-            INSERT_RECETTE("INSERT INTO \"episaine-schema\".recettes (\"nom_recette\", \"nombre_de_calories\", \"ingredients\", \"instructions\", \"regimealimentaire\", \"id_nutritionniste\") VALUES (?, ?, ?, ?, ?, ?)"),
+            INSERT_RECIPE("INSERT INTO \"episaine-schema\".recettes (\"nom_recette\", \"nombre_de_calories\", \"ingredients\", \"instructions\", \"regimealimentaire\", \"id_nutritionniste\") VALUES (?, ?, ?, ?, ?, ?)"),
             INSERT_INFORMATION("INSERT INTO \"episaine-schema\".informations (\"id_client\", \"but\", \"allergie\", \"nbderepas\") VALUES (?,?,?,?)"),
-            INSERT_NUTRITIONNISTE("INSERT INTO \"episaine-schema\".nutritionnistes (\"nom_n\", \"prenom_n\", \"numero_de_telephone_n\", \"mail_n\") VALUES (?,?,?,?)"),
+            INSERT_NUTRITIONIST("INSERT INTO \"episaine-schema\".nutritionnistes (\"nom_n\", \"prenom_n\", \"numero_de_telephone_n\", \"mail_n\") VALUES (?,?,?,?)"),
 
             DELETE_CLIENT("DELETE FROM \"episaine-schema\".clients WHERE \"id_client\" = ? "),
-            DELETE_RECETTE("DELETE FROM \"episaine-schema\".recettes WHERE \"id_recette\" = ?"),
+            DELETE_RECIPE("DELETE FROM \"episaine-schema\".recettes WHERE \"id_recette\" = ?"),
             DELETE_INFORMATION("DELETE FROM \"episaine-schema\".informations WHERE \"id_info\" = ?"),
-            DELETE_NUTRITIONNISTE("DELETE FROM \"episaine-schema\".nutritionnistes WHERE \"id_nutritionniste\" = ? "),
+            DELETE_NUTRITIONIST("DELETE FROM \"episaine-schema\".nutritionnistes WHERE \"id_nutritionniste\" = ? "),
             ;
         
             private final String query;
@@ -121,10 +121,10 @@ public class XMartCityService {
                     response.setResponseBody(mapper.writeValueAsString(specificClient));
                     break;
 
-                case "COUNT_REGIME" :
+                case "COUNT_DIETS" :
                     logger.info("requestOrder : " + request.getRequestOrder());
                     stmt = connection.createStatement();
-                    res = stmt.executeQuery(Queries.COUNT_REGIME.query);
+                    res = stmt.executeQuery(Queries.COUNT_DIETS.query);
                     res.next();
                     logger.info(request.getRequestOrder() + " : processing done");
                     response = new Response();
@@ -143,10 +143,10 @@ public class XMartCityService {
                     response.setResponseBody(mapper.writeValueAsString(res.getBigDecimal(1)));
                     break;
 
-                case "AVG_ALLERGIE" :
+                case "AVG_ALLERGY" :
                     logger.info("requestOrder : " + request.getRequestOrder());
                     stmt = connection.createStatement();
-                    res = stmt.executeQuery(Queries.AVG_ALLERGIE.query);
+                    res = stmt.executeQuery(Queries.AVG_ALLERGY.query);
                     res.next();
                     logger.info(request.getRequestOrder() + " : processing done");
                     response = new Response();
@@ -249,13 +249,13 @@ public class XMartCityService {
                  
                 //-----------------------------
 
-                case "SELECT_ALL_RECETTES" :
+                case "SELECT_ALL_RECIPES" :
                 logger.info("requestOrder : " + request.getRequestOrder());
                     stmt = connection.createStatement();
-                    res = stmt.executeQuery(Queries.SELECT_ALL_RECETTES.query);
-                    Recettes recettes = new Recettes();
+                    res = stmt.executeQuery(Queries.SELECT_ALL_RECIPES.query);
+                    Recipes recettes = new Recipes();
                     while (res.next()) {
-                        Recette recette = new Recette().build(res);
+                        Recipe recette = new Recipe().build(res);
                         recettes.add(recette);
                     }
                     logger.info(request.getRequestOrder() + " : precessing done");
@@ -270,9 +270,9 @@ public class XMartCityService {
                     pstmt = connection.prepareStatement(Queries.SELECT_SPECIFIC_RECIPES_NOT_ABOVE.query);
                     pstmt.setInt(1, Integer.parseInt(requestConditionsAbove));
                     res = pstmt.executeQuery();
-                    Recettes recettesAbove = new Recettes();
+                    Recipes recettesAbove = new Recipes();
                     while (res.next()) {
-                        Recette recetteAbove = new Recette().build(res);
+                        Recipe recetteAbove = new Recipe().build(res);
                         recettesAbove.add(recetteAbove);
                     }
                     logger.info(request.getRequestOrder() + " : precessing done");
@@ -289,9 +289,9 @@ public class XMartCityService {
                     pstmt.setInt(1, Integer.parseInt(requestConditionsValueBetween[0].substring(1)));
                     pstmt.setInt(2, Integer.parseInt(requestConditionsValueBetween[1].substring(0, requestConditionsValueBetween[1].length()-1)));
                     res = pstmt.executeQuery();
-                    Recettes recettesBetween = new Recettes();
+                    Recipes recettesBetween = new Recipes();
                     while (res.next()) {
-                        Recette recetteBetween = new Recette().build(res);
+                        Recipe recetteBetween = new Recipe().build(res);
                         recettesBetween.add(recetteBetween);
                     }
                     logger.info(request.getRequestOrder() + " : precessing done");
@@ -306,9 +306,9 @@ public class XMartCityService {
                     pstmt = connection.prepareStatement(Queries.SELECT_SPECIFIC_RECIPES_NOT_BELOW.query);
                     pstmt.setInt(1, Integer.parseInt(requestConditionsBelow));
                     res = pstmt.executeQuery();
-                    Recettes recettesBelow = new Recettes();
+                    Recipes recettesBelow = new Recipes();
                     while (res.next()) {
-                        Recette recetteBelow = new Recette().build(res);
+                        Recipe recetteBelow = new Recipe().build(res);
                         recettesBelow.add(recetteBelow);
                     }
                     logger.info(request.getRequestOrder() + " : precessing done");
@@ -317,10 +317,10 @@ public class XMartCityService {
                     response.setResponseBody(mapper.writeValueAsString(recettesBelow));
                     break;
 
-                case "COUNT_RECETTES" :
+                case "COUNT_RECIPES" :
                     logger.info("requestOrder : " + request.getRequestOrder());
                     stmt = connection.createStatement();
-                    res = stmt.executeQuery(Queries.COUNT_RECETTES.query);
+                    res = stmt.executeQuery(Queries.COUNT_RECIPES.query);
                     res.next();
                     logger.info(request.getRequestOrder() + " : processing done");
                     response = new Response();
@@ -328,10 +328,10 @@ public class XMartCityService {
                     response.setResponseBody(mapper.writeValueAsString(res.getInt(1)));
                     break;
 
-                case "INSERT_RECETTE" :
+                case "INSERT_RECIPE" :
                 logger.info("requestOrder : " + request.getRequestOrder());
-                    Recette recette = (Recette) mapper.readValue(request.getRequestBody(), Recette.class);
-                    pstmt = connection.prepareStatement(Queries.INSERT_RECETTE.query);
+                    Recipe recette = (Recipe) mapper.readValue(request.getRequestBody(), Recipe.class);
+                    pstmt = connection.prepareStatement(Queries.INSERT_RECIPE.query);
                     pstmt.setString(1, recette.getNom_recette());
                     pstmt.setInt(2, recette.getNombre_de_calories());
                     pstmt.setString(3, recette.getIngredients());
@@ -345,7 +345,7 @@ public class XMartCityService {
                     response.setResponseBody("{\"insert\": " + rows + " }");
                     break;
                 
-                case "UPDATE_RECETTE" :
+                case "UPDATE_RECIPE" :
                 logger.info("requestOrder : " + request.getRequestOrder());
                     update = (Update) mapper.readValue(request.getRequestBody(), Update.class);
                     pstmt = connection.prepareStatement("UPDATE \"episaine-schema\".recettes SET " + update.getNewColumn() + "= ? WHERE " + update.getConditionColumn() + "= ?");
@@ -368,9 +368,9 @@ public class XMartCityService {
                     response.setResponseBody("{\"update\": " + rows + " }");
                     break;
 
-                case "DELETE_RECETTE":
+                case "DELETE_RECIPE":
                 logger.info("requestOrder : " + request.getRequestOrder());
-                    pstmt = connection.prepareStatement(Queries.DELETE_RECETTE.query);
+                    pstmt = connection.prepareStatement(Queries.DELETE_RECIPE.query);
                     pstmt.setInt(1, Integer.parseInt(request.getRequestBody()));
                     rows = pstmt.executeUpdate();
                     logger.info(request.getRequestOrder() + " : precessing done");
@@ -381,13 +381,13 @@ public class XMartCityService {
 
                 //-----------------------------
 
-                case "SELECT_ALL_NUTRITIONNISTES" :
+                case "SELECT_ALL_NUTRITIONISTS" :
                 logger.info("requestOrder : " + request.getRequestOrder());
                     stmt = connection.createStatement();
-                    res = stmt.executeQuery(Queries.SELECT_ALL_NUTRITIONNISTES.query);
-                    Nutritionnistes nutritionnistes = new Nutritionnistes();
+                    res = stmt.executeQuery(Queries.SELECT_ALL_NUTRITIONISTS.query);
+                    Nutritionists nutritionnistes = new Nutritionists();
                     while (res.next()) {
-                        Nutritionniste nutritionniste = new Nutritionniste().build(res);
+                        Nutritionist nutritionniste = new Nutritionist().build(res);
                         nutritionnistes.add(nutritionniste);
                     }
                     logger.info(request.getRequestOrder() + " : precessing done");
@@ -396,10 +396,10 @@ public class XMartCityService {
                     response.setResponseBody(mapper.writeValueAsString(nutritionnistes));
                     break;
 
-                case "COUNT_NUTRITIONNISTES" :
+                case "COUNT_NUTRITIONISTS" :
                     logger.info("requestOrder : " + request.getRequestOrder());
                     stmt = connection.createStatement();
-                    res = stmt.executeQuery(Queries.COUNT_NUTRITIONNISTES.query);
+                    res = stmt.executeQuery(Queries.COUNT_NUTRITIONISTS.query);
                     res.next();
                     logger.info(request.getRequestOrder() + " : processing done");
                     response = new Response();
@@ -407,10 +407,10 @@ public class XMartCityService {
                     response.setResponseBody(mapper.writeValueAsString(res.getInt(1)));
                     break;
 
-                case "INSERT_NUTRITIONNISTE" : 
+                case "INSERT_NUTRITIONIST" : 
                 logger.info("requestOrder : " + request.getRequestOrder());
-                    Nutritionniste nutritionniste = (Nutritionniste) mapper.readValue(request.getRequestBody(), Nutritionniste.class);
-                    pstmt = connection.prepareStatement(Queries.INSERT_NUTRITIONNISTE.query);
+                    Nutritionist nutritionniste = (Nutritionist) mapper.readValue(request.getRequestBody(), Nutritionist.class);
+                    pstmt = connection.prepareStatement(Queries.INSERT_NUTRITIONIST.query);
                     pstmt.setString(1, nutritionniste.getNom_N());
                     pstmt.setString(2, nutritionniste.getPrenom_N());
                     pstmt.setString(3, nutritionniste.getNumero_de_telephone_N());
@@ -422,7 +422,7 @@ public class XMartCityService {
                     response.setResponseBody("{\"insert\": " + rows + " }");
                     break; 
 
-                case "UPDATE_NUTRITIONNISTE" :
+                case "UPDATE_NUTRITIONIST" :
                 logger.info("requestOrder : " + request.getRequestOrder());
                     update = (Update) mapper.readValue(request.getRequestBody(), Update.class);
                     pstmt = connection.prepareStatement("UPDATE \"episaine-schema\".nutritionnistes SET " + update.getNewColumn() + "= ? WHERE " + update.getConditionColumn() + "= ?");
@@ -435,9 +435,9 @@ public class XMartCityService {
                     response.setResponseBody("{\"update\": " + rows + " }");
                     break;
 
-                case "DELETE_NUTRITIONNISTE":
+                case "DELETE_NUTRITIONIST":
                 logger.info("requestOrder : " + request.getRequestOrder());
-                    pstmt = connection.prepareStatement(Queries.DELETE_NUTRITIONNISTE.query);
+                    pstmt = connection.prepareStatement(Queries.DELETE_NUTRITIONIST.query);
                     pstmt.setInt(1, Integer.parseInt(request.getRequestBody()));
                     rows = pstmt.executeUpdate();
                     logger.info(request.getRequestOrder() + " : precessing done");
